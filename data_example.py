@@ -3,7 +3,7 @@ import numpy as np
 
 def recorido():
     bufer=[]
-    data=r.LR_file(np.random.randint(10),".venv\BaseDatos_EMG_Acc-20230304T150927Z-001\BaseDatos_EMG_Acc")
+    data=r.LR_file(np.random.randint(10),"BaseDatos_EMG_Acc-20230304T150927Z-001\BaseDatos_EMG_Acc")
     n=len(data)/11000
     n2=1/n
     n3=n2*len(data)

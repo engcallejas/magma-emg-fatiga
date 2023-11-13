@@ -29,7 +29,7 @@ def LR_file(i,ruta):
     emg=[]
     archivos=os.listdir(ruta)
     
-    data = pd.read_excel(f'{ruta}\{archivos[i]}')
+    data = pd.read_excel(f'{ruta}/{archivos[i]}')
     nombresCol=data.columns
     emg_temp = data[nombresCol[0]]
     
@@ -43,5 +43,5 @@ def LR_file(i,ruta):
 
 
 if __name__=="__main__":
-    archivos = LR_file(1,".venv\BaseDatos_EMG_Acc-20230304T150927Z-001\BaseDatos_EMG_Acc")
+    archivos = LR_file(1,"BaseDatos_EMG_Acc-20230304T150927Z-001/BaseDatos_EMG_Acc")
     

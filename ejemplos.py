@@ -13,7 +13,11 @@ app = dash.Dash(__name__)
 x = np.linspace(0, 10, 1000)
 global c
 c=0
-ruta=".venv\BaseDatos_EMG_Acc-20230304T150927Z-001\BaseDatos_EMG_Acc"
+ruta="/home/ec2-user/magma-emg-fatiga/BaseDatos_EMG_Acc-20230304T150927Z-001/BaseDatos_EMG_Acc"
+
+min_, max_ = (0,0)
+data = []
+data_=r.LR_file(0,ruta)
 
 n=110000
 f=1000
@@ -40,7 +44,7 @@ app.layout = html.Div([
     dcc.Graph(id='graph-6', style={'width': '25%', 'display': 'inline-block', 'verticalAlign': 'top'}),
     dcc.Interval(
         id='interval-component',
-        interval=5000,  # en milisegundos
+        interval=100,  # en milisegundos
         n_intervals=0
     ),
 ])
@@ -58,8 +62,26 @@ app.layout = html.Div([
 )
 
 def update_graph(n):
-    data=r.LR_file(np.random.randint(10),ruta)
-    data_sm=r.suavizar(r.envolvente(data),1000,3)
+    global data, data_, min_, max_
+    
+    
+    window_size = 500
+    
+    if max_ == 0:
+        data = []
+        max_ = window_size
+    elif max_ != 0:
+        min_ = max_
+        max_ += window_size
+    
+    if max_ >= len(data_):
+        data = []
+        min_ = 0
+        max_ = window_size
+
+    data += data_[min_:max_]
+
+    data_sm=r.suavizar(r.envolvente(data_),1000,3)
    
     ctx = dash.callback_context
       
@@ -105,4 +127,4 @@ def update_graph(n):
     return fig1, fig2, fig3, fig4, fig5, fig6
 
 if __name__ == '__main__':
-    app.run_server(debug=False)
+    app.run_server(debug=False, host= '0.0.0.0', port=8051)
